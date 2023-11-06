@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Image, Switch, } from "react-native";
 import { useContext, useState } from 'react';
 import { UtilsContexto } from "./Context";
+import Usuario from "./Usuario";
 
 export default function Cadastro(props) {
 
@@ -15,10 +16,17 @@ export default function Cadastro(props) {
     const [senhare, setSenhare] = useState("")
 
 
-
     function goToLogin() {
         if (senha == senhare) {
-            setUtils({ ...utils, nome: nome, idade: idade, sexo: sexo, email: email, senha: senha })
+            const Usuario = {
+                nome: nome,
+                idade: idade,
+                sexo: sexo,
+                email: email,
+                senha: senha
+            }
+            const Usuarios = [...utils.Usuarios, Usuario]
+            setUtils({ ...utils, Usuarios: Usuarios })
             props.navigation.navigate('Login')
         }
     }

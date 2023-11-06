@@ -37,16 +37,24 @@ export default function Login(props) {
     const [senha, setSenha] = useState("")
     const [usuario, setUsuario] = useState("")
 
+    if (utils.Usuarios == undefined) {
+        setUtils({ ...utils, Usuarios: [] })
+    }
+
     function goToCadastro() {
+
         props.navigation.navigate('Cadastro')
     }
 
     function goToUsuario() {
-        if (usuario == utils.nome && senha == utils.senha) {
-            props.navigation.navigate('Usuario')
-        }
+        utils.Usuarios.forEach(element => {
+            if (usuario == element.nome && senha == element.senha) {
+                props.navigation.navigate('Usuario')
+            }
+        });
 
     }
+
 
     return (
 
@@ -102,4 +110,8 @@ export default function Login(props) {
             </View>
         </View>
     )
+
+    function mostraUsu() {
+        console.log(utils.Usuarios)
+    }
 }
