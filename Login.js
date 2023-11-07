@@ -1,8 +1,9 @@
-import { Text, Button, View, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
+import { Text, Button, View, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Modal } from "react-native";
 import { TextInput } from "react-native-web";
 import { clickProps } from "react-native-web/dist/cjs/modules/forwardedProps";
 import { UtilsContexto } from "./Context";
 import { useContext, useState } from 'react';
+import ModalUsuario from './ModalUsuario';
 
 
 
@@ -37,6 +38,8 @@ export default function Login(props) {
     const [senha, setSenha] = useState("")
     const [usuario, setUsuario] = useState("")
 
+    const [modalVisible, setModalVisible] = useState(false);
+
     if (utils.Usuarios == undefined) {
         setUtils({ ...utils, Usuarios: [] })
     }
@@ -52,7 +55,25 @@ export default function Login(props) {
                 props.navigation.navigate('Usuario')
             }
         });
+    }
 
+    function mudarModal() {
+
+        utils.Usuarios.forEach(element => {
+            if (usuario == element.nome && senha == element.senha) {
+                setModalVisible(!modalVisible);
+            }
+        });
+    }
+
+    function mudarModalVdd() {
+        setModalVisible(!modalVisible);
+    }
+
+    const deletar = (index) => {
+        const novosUsuarios = [...utils.Usuarios];
+        novosUsuarios.splice(index, 1);
+        setUtils({ ...utils, Usuarios: novosUsuarios });
     }
 
 
@@ -78,7 +99,7 @@ export default function Login(props) {
                             style={styles.textimput} />
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => goToUsuario()}
+                <TouchableOpacity onPress={() => mudarModal()}
                     style={{
                         width: "20em",
                         height: "3em",
@@ -107,11 +128,8 @@ export default function Login(props) {
                         <Text style={{ color: "black" }}>Cadastrar</Text>
                     </View>
                 </TouchableWithoutFeedback>
+                <ModalUsuario visible={modalVisible} onClose={mudarModalVdd} usuarios={utils.Usuarios} deletar={deletar} />
             </View>
         </View>
     )
-
-    function mostraUsu() {
-        console.log(utils.Usuarios)
-    }
 }
