@@ -1,7 +1,9 @@
+import axios from 'axios';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Image, Switch, } from "react-native";
 import { useContext, useState } from 'react';
 import { UtilsContexto } from "./Context";
 import Usuario from "./Usuario";
+
 
 export default function Cadastro(props) {
 
@@ -15,6 +17,28 @@ export default function Cadastro(props) {
     const [senha, setSenha] = useState("")
     const [senhare, setSenhare] = useState("")
 
+    const apiJava = async (name, age) => {
+
+        if (senha == senhare) {
+            try {
+                const response = await axios.post("http://localhost:8080/user", { name, age });
+                console.log('Resposta da API:', response);
+            } catch (error) {
+                console.error('Deu erro!', error);
+            }
+            const Usuario = {
+                nome: nome,
+                idade: idade,
+                sexo: sexo,
+                email: email,
+                senha: senha
+            }
+            const Usuarios = [...utils.Usuarios, Usuario]
+            setUtils({ ...utils, Usuarios: Usuarios })
+            props.navigation.navigate('Login')
+        }
+
+    };
 
     function goToLogin() {
         if (senha == senhare) {
@@ -100,7 +124,7 @@ export default function Cadastro(props) {
                     alignItems: "center",
                     marginBottom: "1em"
                 }}
-                onPress={() => goToLogin()}
+                onPress={() => apiJava(nome, idade)}
             >
                 <Text>Cadastrar</Text>
             </TouchableOpacity>
